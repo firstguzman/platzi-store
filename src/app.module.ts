@@ -1,38 +1,30 @@
 import { Module } from '@nestjs/common';
+import * as Joi from 'joi';
+import { ConfigModule } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProductsController } from './controllers/products.controller';
-import { CategoriesController } from './controllers/categories.controller';
-import { OrdersController } from './controllers/orders.controller';
-import { UsersController } from './controllers/users.controller';
-import { CostumersController } from './controllers/costumers.controller';
-import { BrandsController } from './controllers/brands.controller';
-import { ProductsService } from './services/products.service';
-import { UsersService } from './services/users.service';
-import { OrdersService } from './services/orders.service';
-import { CostumersService } from './services/costumers.service';
-import { CategoriesService } from './services/categories.service';
-import { BrandsService } from './services/brands.service';
+import { DatabaseModule } from './database/database.module';
+import { environments } from './environments';
+import config from './config';
 
 @Module({
-  imports: [],
-  controllers: [
-    AppController,
-    ProductsController,
-    CategoriesController,
-    OrdersController,
-    UsersController,
-    CostumersController,
-    BrandsController,
+  imports: [
+    HttpModule,
+    DatabaseModule,
+    ConfigModule.forRoot({
+      envFilePath: environments[process.env.NODE_ENV] || '.env',
+      load: [config],
+      isGlobal: true,
+      validationSchema: Joi.object({
+        API_KEY: Joi.number().required(),
+        DATABASE_NAME: Joi.string().required(),
+        DATABASE_PORT: Joi.number().required(),
+      }),
+    }),
   ],
-  providers: [
-    AppService,
-    ProductsService,
-    UsersService,
-    OrdersService,
-    CostumersService,
-    CategoriesService,
-    BrandsService,
-  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
