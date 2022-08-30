@@ -8,6 +8,7 @@ import {
   Put,
   HttpStatus,
   HttpCode,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
@@ -24,8 +25,11 @@ export class ProductsController {
 
   @Get()
   @ApiOperation({ summary: 'List of products' })
-  getProducts() {
-    // @Query('brand') brand: string, // @Query('offset') offset = 0, // @Query('limit') limit = 100,
+  getProducts(
+    @Query('brand') brand: string,
+    @Query('offset') offset = 0,
+    @Query('limit') limit = 100,
+  ) {
     return this.productsService.findAll();
   }
 
