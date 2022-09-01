@@ -8,7 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ParseIntPipe } from 'src/common/parse-int.pipe';
+import { MongoIdPipe } from 'src/common/mongo-id.pipe';
 import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/categories.dto';
 import { CategoriesService } from '../services/categories.service';
 
@@ -24,7 +24,7 @@ export class CategoriesController {
   }
 
   @Get(':id')
-  get(@Param('id', ParseIntPipe) id: number) {
+  get(@Param('id', MongoIdPipe) id: string) {
     return this.categoriesService.findOne(id);
   }
 
@@ -35,14 +35,14 @@ export class CategoriesController {
 
   @Put(':id')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', MongoIdPipe) id: string,
     @Body() payload: UpdateCategoryDto,
   ) {
     return this.categoriesService.update(id, payload);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.categoriesService.remove(+id);
+  remove(@Param('id', MongoIdPipe) id: string) {
+    return this.categoriesService.remove(id);
   }
 }

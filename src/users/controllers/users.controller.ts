@@ -8,7 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ParseIntPipe } from 'src/common/parse-int.pipe';
+import { MongoIdPipe } from 'src/common/mongo-id.pipe';
 import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
 import { UsersService } from '../services/users.service';
 
@@ -24,7 +24,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  get(@Param('id', ParseIntPipe) id: number) {
+  get(@Param('id', MongoIdPipe) id: string) {
     return this.usersService.findOne(id);
   }
 
@@ -34,20 +34,17 @@ export class UsersController {
   }
 
   @Put(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UpdateUserDto,
-  ) {
+  update(@Param('id', MongoIdPipe) id: string, @Body() payload: UpdateUserDto) {
     return this.usersService.update(id, payload);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.remove(+id);
+  remove(@Param('id', MongoIdPipe) id: string) {
+    return this.usersService.remove(id);
   }
 
   @Get(':id/orders')
-  getOrders(@Param('id', ParseIntPipe) id: number) {
+  getOrders(@Param('id', MongoIdPipe) id: string) {
     return this.usersService.getOrderByUser(id);
   }
 }

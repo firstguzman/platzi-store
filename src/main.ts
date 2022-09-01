@@ -9,7 +9,10 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true, // Ignorar datos que no esten en los DTO
       forbidNonWhitelisted: true, // Lanzar error si existen datos prohibidos
-      disableErrorMessages: true, // Desabilitar mensajes de error (producción)
+      disableErrorMessages: true, // Deshabilitar mensajes de error (producción)
+      transformOptions: {
+        enableImplicitConversion: true, // transforma explicitamente lo que viene por query params
+      },
     }),
   );
 
